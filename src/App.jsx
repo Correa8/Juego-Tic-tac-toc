@@ -1,4 +1,5 @@
 import { useState } from "react"
+import confetti from "canvas-confetti"
 
 const TURNS = {
   X: 'x',
@@ -51,6 +52,16 @@ function App () {
   return null
  }
 
+ const resetGame = () => {
+  setBoard(Array(9).fill(null))
+  setTurn(TURNS.X)
+  setWinner(null)
+ }
+
+ const checkEnGame = (newBoard)=> {
+  return newBoard.every((square) => square != null)
+ }
+
  const updateBoard = (index) => {
   //no actualizar si ya tiene x-o
 if (board[index] || winner) return 
@@ -64,26 +75,27 @@ if (board[index] || winner) return
 
  const newWinner = checkWinner(newBoard)
  if (newWinner){
-  setWinner((prevWinner) => {
-    console.log(`Ganador: ${newWinner}, el anterior era ${prevWinner}`)
-    return newWinner
-  })
+  confetti()
+  setWinner(newWinner)
+ }else if (checkEnGame(newBoard)) {
+  setWinner(false)
  }
  }
 
   return (
   <main className="board">
     <h1>TIC TAC TOE</h1>
+    <button onClick={resetGame}>Reset del Juego</button>
     <section className="game">
       {
-        board.map((_, index) => {
+        board.map((square, index) => {
           return (
            <Square
            key={index}
            index={index}
            updateBoard={updateBoard}
            >
-            {board[index]}
+            {square}
            </Square>
           )
         })
@@ -93,6 +105,29 @@ if (board[index] || winner) return
       <Square isSelected={turn === TURNS.X}>{TURNS.X}</Square>
       <Square isSelected={turn === TURNS.O}>{TURNS.O}</Square>
     </section>
+
+    {
+      winner != null && (
+        <section className="winner">
+          <div className="text">
+            <h2>{
+               winner === false
+               ? 'Empate'
+               : 'Gano'
+              }
+              </h2>
+              
+              <header>
+                {winner && <Square>{winner}</Square>}
+              </header>
+
+              <footer>
+                <button onClick={resetGame}>Empezar de nuevo</button>
+              </footer>
+          </div>
+        </section>
+      )
+    }
   </main>
     )
 }
