@@ -3,8 +3,7 @@ Creación del juego "tricky" con la practica del estado en React
 
 VISITAR LA WEB
 
-*
-https://tricky-danii.netlify.app/
 
-*
+ ._. https://tricky-danii.netlify.app/ ._.
+
 
